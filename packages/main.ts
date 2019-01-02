@@ -11,7 +11,7 @@
 */
 import { PerfTiming } from "@zowe/perf-timing";
 
-const timingApi = PerfTiming.getApi();
+const timingApi = PerfTiming.api;
 
 timingApi.mark("pre-init");
 
