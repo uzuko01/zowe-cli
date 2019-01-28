@@ -209,6 +209,33 @@ describe("Get Jobs - System Tests", () => {
                     expect(foundJob.jobname).toEqual(job.jobname);
                 }, LONG_TIMEOUT);
 
+                it("should be able to get a single job by correlator", async () => {
+                    // Read the JCL template file
+                    const iefbr14JclTemplate = fs.readFileSync(join(TEST_RESOURCES_DIR, "jcl/iefbr14.jcl")).toString();
+
+                    // submit a job that we can list
+                    // Render the job with increasing job name
+                    const jobRender = iefbr14JclTemplate;
+                    const renderedJcl = TextUtils.renderWithMustache(jobRender,
+                        {JOBNAME: MONITOR_JOB_NAME + "S", ACCOUNT, JOBCLASS, TYPERUNPARM: "", SYSAFF});
+
+                    // Submit the job
+                    const job = await SubmitJobs.submitJclNotify(REAL_SESSION, renderedJcl);
+                    expect(job.status).toEqual("OUTPUT");
+                    expect(job.retcode).toEqual("CC 0000");
+
+
+                    // TODO: this is a workaround for an issue where listing jobs immediately after they are completed
+                    // results in the jobs being omitted from the results
+                    await waitThreeSeconds();
+
+                    // Search all jobs returned for each of the submitted jobs
+                    const foundJob = await GetJobs.getJobByCorrelator(REAL_SESSION, job["job-correlator"]);
+                    expect(foundJob).toBeDefined();
+                    expect(foundJob.jobid).toEqual(job.jobid);
+                    expect(foundJob.jobname).toEqual(job.jobname);
+                }, LONG_TIMEOUT);
+
                 it("should be able to get a single job by job ID", async () => {
                     // Read the JCL template file
                     const iefbr14JclTemplate = fs.readFileSync(join(TEST_RESOURCES_DIR, "jcl/iefbr14.jcl")).toString();

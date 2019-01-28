@@ -236,6 +236,26 @@ exports[`GetJobs tests getJobs APIs should have proper URI when using owner 1`] 
 
 exports[`GetJobs tests getJobs APIs should have proper URI when using prefix 1`] = `"/zosmf/restjobs/jobs?prefix=fakePrefix"`;
 
+exports[`GetJobs tests getJobs APIs should locate a job by correlator 1`] = `
+Array [
+  Object {
+    "class": "A",
+    "files-url": "www.nowhere.com/restjobs/jobs/files",
+    "job-correlator": "123545asdfadf",
+    "jobid": "TSUxxx",
+    "jobname": "IBMUSER$",
+    "owner": "IBMUSER",
+    "phase": 88,
+    "phase-name": "testagain",
+    "retcode": "CC 0000",
+    "status": "OUTPUT",
+    "subsystem": "JES2",
+    "type": "job",
+    "url": "www.nowhere.com/restjobs/jobs",
+  },
+]
+`;
+
 exports[`GetJobs tests getJobs APIs should locate a job by jobid 1`] = `
 Object {
   "class": "A",

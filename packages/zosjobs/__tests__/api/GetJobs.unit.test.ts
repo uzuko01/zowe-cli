@@ -47,10 +47,10 @@ function mockGetJobsServerError(errorCode: string, causeErrors: string) {
                     msg: "Rest API failure with HTTP(S) status " + errorCode,
                     causeErrors,
                     additionalDetails:
-                    "Resource: " + resource +
-                    "Request: " + "GET" +
-                    "Headers: " + JSON.stringify(headers) +
-                    "Payload: " + undefined,
+                        "Resource: " + resource +
+                        "Request: " + "GET" +
+                        "Headers: " + JSON.stringify(headers) +
+                        "Payload: " + undefined,
                     errorCode,
                 }));
             });
@@ -197,6 +197,13 @@ describe("GetJobs tests", () => {
         it("should locate a job by jobid", async () => {
             (ZosmfRestClient.getExpectJSON as any) = mockGetJobsJSONData([GetJobsData.SAMPLE_COMPLETE_JOB]);
             const job = await GetJobs.getJob(pretendSession, GetJobsData.SAMPLE_COMPLETE_JOB.jobid);
+            expect(job).toBeDefined();
+            expect(job).toMatchSnapshot();
+        });
+
+        it("should locate a job by correlator", async () => {
+            (ZosmfRestClient.getExpectJSON as any) = mockGetJobsJSONData([GetJobsData.SAMPLE_COMPLETE_JOB]);
+            const job = await GetJobs.getJobByCorrelator(pretendSession, GetJobsData.SAMPLE_COMPLETE_JOB["job-correlator"]);
             expect(job).toBeDefined();
             expect(job).toMatchSnapshot();
         });

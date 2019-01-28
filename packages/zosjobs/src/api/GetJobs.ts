@@ -118,6 +118,22 @@ export class GetJobs {
     }
 
     /**
+     * Get a single job object from an input job correlator
+     * @static
+     * @param {AbstractSession} session - z/OSMF connection info
+     * @param {string} correlator - the z/osmf job correlator for the job for which you want to get status
+     * @returns {Promise<IJob>} - promise that resolves to an IJob object from an input jobid
+     * @memberof GetJobs
+     */
+    public static async getJobByCorrelator(session: AbstractSession, correlator: string): Promise<IJob> {
+        Logger.getAppLogger().trace("GetJobs.getJobByCorrelator()");
+        ImperativeExpect.toBeDefinedAndNonBlank(correlator, "Job Correlator");
+        ImperativeExpect.toNotBeNullOrUndefined(session, "Required session must be defined");
+        const resource = JobsConstants.RESOURCE + "/" + correlator;
+        return ZosmfRestClient.getExpectJSON<IJob>(session, resource);
+    }
+
+    /**
      * Get jobs filtered by owner and prefix.
      * @static
      * @param {AbstractSession} session - z/OSMF connection info
@@ -126,7 +142,6 @@ export class GetJobs {
      * @memberof GetJobs
      */
     public static async getJobsCommon(session: AbstractSession, parms?: IGetJobsParms) {
-        // TODO(Kelosky): after **REMOVED** is fixed we can remove this message
         Logger.getAppLogger().trace("GetJobs.getJobsCommon()");
         ImperativeExpect.toNotBeNullOrUndefined(session, "Required session must be defined");
         let query = JobsConstants.QUERY_ID;
