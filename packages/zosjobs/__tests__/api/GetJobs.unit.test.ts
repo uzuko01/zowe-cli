@@ -403,10 +403,13 @@ describe("GetJobs tests", () => {
             const spoolFiles = await GetJobs.getSpoolFiles(pretendSession, "jobname", "jobid");
             const spoolFilesForJob = await GetJobs.getSpoolFilesForJob(pretendSession, GetJobsData.SAMPLE_COMPLETE_JOB);
             const spoolFilesCommon = await GetJobs.getSpoolFilesCommon(pretendSession, {jobname: "jobname", jobid: "jobid"});
+            const spoolFilesCorrelator = await GetJobs.getSpoolFilesByCorrelator(pretendSession, "fake-correlator");
             expect(spoolFiles).toMatchSnapshot();
             expect(spoolFilesForJob).toMatchSnapshot();
             expect(spoolFilesCommon).toMatchSnapshot();
+            expect(spoolFilesCorrelator).toMatchSnapshot();
         });
+
     });
 
     describe("getSpoolContent APIs", () => {

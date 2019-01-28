@@ -455,6 +455,59 @@ Array [
 ]
 `;
 
+exports[`GetJobs tests getSpoolFiles APIs should be able to get spool files 4`] = `
+Array [
+  Object {
+    "byte-count": 1297,
+    "class": "Z",
+    "ddname": "JESMSGLG",
+    "id": 2,
+    "job-correlator": "J0007172USILDAMDD41B4773.......:",
+    "jobid": "JOB07172",
+    "jobname": "RUNMAIN",
+    "lrecl": 133,
+    "procstep": null,
+    "recfm": "UA",
+    "record-count": 19,
+    "records-url": "https://tso1:443/zosmf/restjobs/jobs/J0007172USILDAMDD41B4773.......%3A/files/2/records",
+    "stepname": "JES2",
+    "subsystem": "JES2",
+  },
+  Object {
+    "byte-count": 223,
+    "class": "Z",
+    "ddname": "JESJCL",
+    "id": 3,
+    "job-correlator": "J0007172USILDAMDD41B4773.......:",
+    "jobid": "JOB07172",
+    "jobname": "RUNMAIN",
+    "lrecl": 136,
+    "procstep": null,
+    "recfm": "V",
+    "record-count": 4,
+    "records-url": "https://tso1:443/zosmf/restjobs/jobs/J0007172USILDAMDD41B4773.......%3A/files/3/records",
+    "stepname": "JES2",
+    "subsystem": "JES2",
+  },
+  Object {
+    "byte-count": 3195,
+    "class": "Z",
+    "ddname": "JESYSMSG",
+    "id": 4,
+    "job-correlator": "J0007172USILDAMDD41B4773.......:",
+    "jobid": "JOB07172",
+    "jobname": "RUNMAIN",
+    "lrecl": 137,
+    "procstep": null,
+    "recfm": "VA",
+    "record-count": 42,
+    "records-url": "https://tso1:443/zosmf/restjobs/jobs/J0007172USILDAMDD41B4773.......%3A/files/4/records",
+    "stepname": "JES2",
+    "subsystem": "JES2",
+  },
+]
+`;
+
 exports[`GetJobs tests getSpoolFiles APIs should error for missing jobname in callback scheme for spool files 1`] = `"Expect Error: Required parameter 'jobname' must not be blank"`;
 
 exports[`GetJobs tests getSpoolFiles APIs should have proper URI when getting spool files 1`] = `"/zosmf/restjobs/jobs/fakeJob/fakeId/files"`;

@@ -276,6 +276,22 @@ export class GetJobs {
     }
 
     /**
+     * Get a list of all job spool files for a job.
+     * @static
+     * @param {AbstractSession} session - z/OSMF connection info
+     * @param {ICommonJobParms} correlator - z/OSMF job correlator
+     * @returns {Promise<IJobFile[]>} - promise that resolves to an array of IJobFile objectsl
+     * @memberof GetJobs
+     */
+    public static async getSpoolFilesByCorrelator(session: AbstractSession, correlator: string) {
+        Logger.getAppLogger().trace("GetJobs.getSpoolFilesByCorrelator()");
+        ImperativeExpect.toBeDefinedAndNonBlank(correlator, "Job Correlator", "Job correlator must be supplied");
+        const parameters: string = "/" + correlator + JobsConstants.RESOURCE_SPOOL_FILES;
+        Logger.getAppLogger().info("GetJobs.getSpoolFilesByCorrelator() parameters: " + parameters);
+        return ZosmfRestClient.getExpectJSON<IJobFile[]>(session, JobsConstants.RESOURCE + parameters);
+    }
+
+    /**
      * Get JCL from a job.
      * @static
      * @param {AbstractSession} session - z/OSMF connection info

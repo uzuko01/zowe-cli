@@ -970,6 +970,17 @@ describe("Get spool APIs", () => {
             });
             await DeleteJobs.deleteJobForJob(REAL_SESSION, job);
         });
+
+        it("should be able to get all spool files in a job by specifying job correleator", async () => {
+            const NUM_OF_SPOOL_FILES = 3;
+            const job = await SubmitJobs.submitJclNotify(REAL_SESSION, JCL);
+            const files = await GetJobs.getSpoolFilesByCorrelator(REAL_SESSION, job["job-correlator"]);
+            expect(files.length).toBe(NUM_OF_SPOOL_FILES); // verify expected number of DDs
+            files.forEach((file) => {
+                expect(file.jobname).toEqual(job.jobname); // verify jobname is in each jobfile
+            });
+            await DeleteJobs.deleteJobForJob(REAL_SESSION, job);
+        });
     });
 
     describe("download spool files", () => {
