@@ -263,8 +263,7 @@ export class SubmitJobs {
         this.log.debug("Waiting to be notified of job completion from Monitor Jobs API for job %s (%s)", job.jobname, job.jobid);
         return MonitorJobs.waitForStatusCommon(session,
             {
-                jobname: job.jobname,
-                jobid: job.jobid,
+                correlator: job["job-correlator"],
                 status,
                 watchDelay,
             });

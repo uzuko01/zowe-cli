@@ -98,7 +98,7 @@ describe("MonitorJobs", () => {
                     try {
                         await MonitorJobs.waitForStatusCommon(undefined as any, {
                             jobname: "ABCD",
-                            jobid  : "EFGH"
+                            jobid: "EFGH"
                         } as any);
                     } catch (e) {
                         error = e;
@@ -114,8 +114,8 @@ describe("MonitorJobs", () => {
                     try {
                         await MonitorJobs.waitForStatusCommon({} as any, {
                             jobname: "ABCD",
-                            jobid  : "EFGH",
-                            status : "INVALID"
+                            jobid: "EFGH",
+                            status: "INVALID"
                         } as any);
                     } catch (e) {
                         error = e;
@@ -130,8 +130,8 @@ describe("MonitorJobs", () => {
 
                     try {
                         await MonitorJobs.waitForStatusCommon({} as any, {
-                            jobname : "ABCD",
-                            jobid   : "EFGH",
+                            jobname: "ABCD",
+                            jobid: "EFGH",
                             attempts: "INVALID"
                         } as any);
                     } catch (e) {
@@ -145,8 +145,8 @@ describe("MonitorJobs", () => {
 
                     try {
                         await MonitorJobs.waitForStatusCommon({} as any, {
-                            jobname : "ABCD",
-                            jobid   : "EFGH",
+                            jobname: "ABCD",
+                            jobid: "EFGH",
                             attempts: -155
                         } as any);
                     } catch (e) {
@@ -162,8 +162,8 @@ describe("MonitorJobs", () => {
 
                     try {
                         await MonitorJobs.waitForStatusCommon({} as any, {
-                            jobname   : "ABCD",
-                            jobid     : "EFGH",
+                            jobname: "ABCD",
+                            jobid: "EFGH",
                             watchDelay: "INVALID"
                         } as any);
                     } catch (e) {
@@ -177,8 +177,8 @@ describe("MonitorJobs", () => {
 
                     try {
                         await MonitorJobs.waitForStatusCommon({} as any, {
-                            jobname   : "ABCD",
-                            jobid     : "EFGH",
+                            jobname: "ABCD",
+                            jobid: "EFGH",
                             watchDelay: -155
                         } as any);
                     } catch (e) {
@@ -192,7 +192,7 @@ describe("MonitorJobs", () => {
 
             describe("error handling", () => {
                 const parms: IMonitorJobWaitForParms = {
-                    jobid  : "123456",
+                    jobid: "123456",
                     jobname: "JOB1234"
                 };
 
@@ -242,7 +242,7 @@ describe("MonitorJobs", () => {
                 pollForStatusSpy.mockReturnValue(returnVal);
 
                 const parms: IMonitorJobWaitForParms = {
-                    jobid  : "JOB123456",
+                    jobid: "JOB123456",
                     jobname: "ABCDEF"
                 };
 
@@ -251,7 +251,7 @@ describe("MonitorJobs", () => {
                 expect(pollForStatusSpy).toHaveBeenCalledTimes(1);
                 expect(pollForStatusSpy).toHaveBeenLastCalledWith({sessionInfo: "Should be here"}, {
                     ...parms,
-                    status  : MonitorJobs.DEFAULT_STATUS,
+                    status: MonitorJobs.DEFAULT_STATUS,
                     attempts: MonitorJobs.DEFAULT_ATTEMPTS
                 });
             });
@@ -261,10 +261,10 @@ describe("MonitorJobs", () => {
                 pollForStatusSpy.mockReturnValue(returnVal);
 
                 const parms: IMonitorJobWaitForParms = {
-                    jobid     : "JOB123456",
-                    jobname   : "ABCDEF",
-                    status    : "INPUT",
-                    attempts  : 150,
+                    jobid: "JOB123456",
+                    jobname: "ABCDEF",
+                    status: "INPUT",
+                    attempts: 150,
                     watchDelay: 20000
                 };
 
@@ -333,17 +333,18 @@ describe("MonitorJobs", () => {
             it("should call waitForStatusCommon", async () => {
                 const returnVal = "THIS SHOULD BE RETURNED BY waitForJobOutputStatus";
                 waitForStatusCommonSpy.mockReturnValue(returnVal);
-
+                const testCorrelator = "correlator";
                 const job: Partial<IJob> = {
-                    jobname: "ABCD123",
-                    jobid: "782314"
+                    "jobname": "ABCD123",
+                    "jobid": "782314",
+                    "job-correlator": testCorrelator
                 };
 
                 expect(await MonitorJobs.waitForJobOutputStatus({shouldPassDown: true} as any, job as any)).toBe(returnVal);
 
                 expect(MonitorJobs.waitForStatusCommon).toHaveBeenCalledTimes(1);
                 expect(MonitorJobs.waitForStatusCommon).toHaveBeenCalledWith({shouldPassDown: true}, {
-                    ...job,
+                    correlator: testCorrelator,
                     status: JOB_STATUS.OUTPUT
                 });
             });
@@ -356,15 +357,15 @@ describe("MonitorJobs", () => {
             let checkStatusSpy = jest.spyOn(privateMonitorJobs, "checkStatus");
 
             const dummyParms: IMonitorJobWaitForParms = {
-                jobid  : "123456",
+                jobid: "123456",
                 jobname: "TESTJOB",
-                status : "ACTIVE"
+                status: "ACTIVE"
             };
 
             const dummyJob: Partial<IJob> = {
-                jobid  : "123456",
+                jobid: "123456",
                 jobname: "TESTJOB",
-                status : "COMPLETE"
+                status: "COMPLETE"
             };
 
             const sleepMock = sleep as jest.Mock<typeof sleep>;
@@ -491,10 +492,10 @@ describe("MonitorJobs", () => {
         });
 
         describe("checkStatus", () => {
-            const getStatusCommonMock = GetJobs.getStatusCommon as jest.Mock<typeof GetJobs.getStatusCommon>;
 
+            const getStatusByCorrelatorMock = GetJobs.getJobByCorrelator as jest.Mock<typeof GetJobs.getJobByCorrelator>;
             beforeEach(() => {
-                getStatusCommonMock.mockReset();
+                getStatusByCorrelatorMock.mockReset();
             });
 
             it("should report back with true", async () => {
@@ -503,19 +504,19 @@ describe("MonitorJobs", () => {
                 };
 
                 const parms: Partial<IMonitorJobWaitForParms> = {
-                    status: "ACTIVE"
+                    status: "ACTIVE",
+                    correlator: "dummy"
                 };
 
-                getStatusCommonMock.mockReturnValue(job);
-
+                getStatusByCorrelatorMock.mockReturnValue(job);
                 let response: [boolean, IJob];
 
                 // The first call is for if the job status is equal to parms
                 response = await privateMonitorJobs.checkStatus({}, parms);
 
                 expect(response).toEqual([true, job]);
-                expect(GetJobs.getStatusCommon).toHaveBeenCalledTimes(1);
-                expect(GetJobs.getStatusCommon).toHaveBeenLastCalledWith({}, parms);
+                expect(GetJobs.getJobByCorrelator).toHaveBeenCalledTimes(1);
+                expect(GetJobs.getJobByCorrelator).toHaveBeenLastCalledWith({}, "dummy");
 
                 job.status = "OUTPUT";
 
@@ -523,20 +524,22 @@ describe("MonitorJobs", () => {
                 response = await privateMonitorJobs.checkStatus({}, parms);
 
                 expect(response).toEqual([true, job]);
-                expect(GetJobs.getStatusCommon).toHaveBeenCalledTimes(2);
-                expect(GetJobs.getStatusCommon).toHaveBeenLastCalledWith({}, parms);
+                expect(GetJobs.getJobByCorrelator).toHaveBeenCalledTimes(2);
+                expect(GetJobs.getJobByCorrelator).toHaveBeenLastCalledWith({}, "dummy");
             });
 
             it("should report back with false", async () => {
                 const job: Partial<IJob> = {
-                    status: "input"
+                    "job-correlator": "dummy",
+                    "status": "input"
                 };
 
                 const parms: Partial<IMonitorJobWaitForParms> = {
-                    status: "ACTIVE"
+                    status: "ACTIVE",
+                    correlator: "dummy"
                 };
 
-                getStatusCommonMock.mockReturnValue(job);
+                getStatusByCorrelatorMock.mockReturnValue(job);
 
                 let response: [boolean, IJob];
 
@@ -544,8 +547,8 @@ describe("MonitorJobs", () => {
                 response = await privateMonitorJobs.checkStatus({}, parms);
 
                 expect(response).toEqual([false, job]);
-                expect(GetJobs.getStatusCommon).toHaveBeenCalledTimes(1);
-                expect(GetJobs.getStatusCommon).toHaveBeenLastCalledWith({}, parms);
+                expect(GetJobs.getJobByCorrelator).toHaveBeenCalledTimes(1);
+                expect(GetJobs.getJobByCorrelator).toHaveBeenLastCalledWith({}, "dummy");
             });
 
             it("should throw an error when an invalid status is present", async () => {
@@ -557,7 +560,7 @@ describe("MonitorJobs", () => {
                     status: "ACTIVE"
                 };
 
-                getStatusCommonMock.mockReturnValue(job);
+                getStatusByCorrelatorMock.mockReturnValue(job);
 
                 let error: Error;
 

@@ -24,7 +24,7 @@ export interface IMonitorJobWaitForParms {
      * @type {string}
      * @memberof IJob
      */
-    jobid: string;
+    jobid?: string;
     /**
      * The z/OS JOBNAME for the job to monitor. No pre-validation of the JOBNAME (other than its presence) is performed.
      * Any errors that you receive regarding invalid JOBID/JOBNAME will be surfaced by z/OSMF. Ensure that your
@@ -32,7 +32,16 @@ export interface IMonitorJobWaitForParms {
      * @type {string}
      * @memberof IJob
      */
-    jobname: string;
+    jobname?: string;
+
+    /**
+     * z/OSMF job correlator for the job you would like to monitor
+     * Specify either this or jobid and jobname
+     * @type {string}
+     * @memberof IMonitorJobWaitForParms
+     */
+    correlator?: string;
+
     /**
      * Watch delay is the polling delay in milliseconds. MonitorJobs will poll ever "watchDelay" milliseconds for the
      * status of the job that is being monitored. Use in conjunction with "attempts" to specify your maximum wait

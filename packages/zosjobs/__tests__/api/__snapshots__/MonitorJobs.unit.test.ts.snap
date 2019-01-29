@@ -18,9 +18,9 @@ EXPECT THIS TO BE THROWN"
 
 exports[`MonitorJobs Public Methods waitForStatusCommon expects should error if missing parms 1`] = `"Expect Error: IMonitorJobParms object required"`;
 
-exports[`MonitorJobs Public Methods waitForStatusCommon expects should error if missing parms.jobid 1`] = `"Expect Error: Required parameter 'jobid' must be defined"`;
+exports[`MonitorJobs Public Methods waitForStatusCommon expects should error if missing parms.jobid 1`] = `"Expect Error: You must specify either jobid and jobname or a z/OSMF job correlator to the waitForStatusCommon API"`;
 
-exports[`MonitorJobs Public Methods waitForStatusCommon expects should error if missing parms.jobname 1`] = `"Expect Error: Required parameter 'jobname' must be defined"`;
+exports[`MonitorJobs Public Methods waitForStatusCommon expects should error if missing parms.jobname 1`] = `"Expect Error: You must specify either jobid and jobname or a z/OSMF job correlator to the waitForStatusCommon API"`;
 
 exports[`MonitorJobs Public Methods waitForStatusCommon expects should error if missing session 1`] = `"Expect Error: Required session must be defined"`;
 

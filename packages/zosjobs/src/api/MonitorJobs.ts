@@ -61,7 +61,7 @@ export class MonitorJobs {
      */
     public static async waitForJobOutputStatus(session: AbstractSession, job: IJob): Promise<IJob> {
         ImperativeExpect.toNotBeNullOrUndefined(job, "IJob object (containing jobname and jobid) required");
-        return MonitorJobs.waitForStatusCommon(session, {jobname: job.jobname, jobid: job.jobid, status: JOB_STATUS.OUTPUT});
+        return MonitorJobs.waitForStatusCommon(session, {correlator: job["job-correlator"], status: JOB_STATUS.OUTPUT});
     }
 
     /**
@@ -99,8 +99,8 @@ export class MonitorJobs {
     public static async waitForStatusCommon(session: AbstractSession, parms: IMonitorJobWaitForParms): Promise<IJob> {
         // Validate that required parameters are specified
         ImperativeExpect.toNotBeNullOrUndefined(parms, "IMonitorJobParms object required");
-        ImperativeExpect.keysToBeDefinedAndNonBlank(parms, ["jobname"]);
-        ImperativeExpect.keysToBeDefinedAndNonBlank(parms, ["jobid"]);
+        ImperativeExpect.toBeEqual((parms.jobid != null && parms.jobname != null) || (parms.correlator != null), true,
+            "You must specify either jobid and jobname or a z/OSMF job correlator to the waitForStatusCommon API");
         ImperativeExpect.toNotBeNullOrUndefined(session, "Required session must be defined");
         if (parms.status != null) {
             ImperativeExpect.toBeOneOf(parms.status, JOB_STATUS_ORDER);
@@ -120,7 +120,8 @@ export class MonitorJobs {
 
         // Log the API call (& full parms at trace level)
         this.log.info(`Monitor Jobs - "waitForStatusCommon" API request: ` +
-            `jobname ${parms.jobname}, jobid ${parms.jobid}, attempts ${parms.attempts}, watch delay ${parms.watchDelay}`);
+            `jobname ${parms.jobname}, jobid ${parms.jobid}, correlator ${parms.correlator},` +
+            `attempts ${parms.attempts}, watch delay ${parms.watchDelay}`);
         this.log.trace(`Parameters:\n${inspect(parms)}`);
 
         // set defaults if not supplied
@@ -203,13 +204,13 @@ export class MonitorJobs {
                     (parms.attempts > 0 && attempt < parms.attempts);
 
                 // Wait for the next poll if we didn't get the proper status.
-                if(shouldContinue) {
+                if (shouldContinue) {
                     // Set a timer which will check the status on expiry
                     this.log.trace(`Setting timeout for next poll...`);
                     await sleep(timeoutVal);
                 }
             } while (shouldContinue);
-        } catch(e) {
+        } catch (e) {
             this.log.error("Received error while polling");
             this.log.error(e);
             throw e;
@@ -242,7 +243,12 @@ export class MonitorJobs {
     private static async checkStatus(session: AbstractSession, parms: IMonitorJobWaitForParms): Promise<[boolean, IJob]> {
         // Log an get the status of the job
         this.log.debug(`Checking for "${parms.status}" status for jobname "${parms.jobname}", jobid "${parms.jobid}"...`);
-        const job: IJob = await GetJobs.getStatusCommon(session, parms);
+        let job: IJob;
+        if (parms.correlator !== null) {
+            job = await GetJobs.getJobByCorrelator(session, parms.correlator);
+        } else {
+            job = await GetJobs.getStatusCommon(session, {jobid: parms.jobid, jobname: parms.jobname});
+        }
         this.log.debug(`jobname "${parms.jobname}" jobid "${parms.jobid}" has current status of "${job.status}".`);
 
         // Ensure that the job status is defined & known

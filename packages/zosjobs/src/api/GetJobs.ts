@@ -256,7 +256,7 @@ export class GetJobs {
      */
     public static getSpoolFilesForJob(session: AbstractSession, job: IJob) {
         Logger.getAppLogger().trace("GetJobs.getSpoolFilesForJob()");
-        return GetJobs.getSpoolFilesCommon(session, {jobname: job.jobname, jobid: job.jobid});
+        return GetJobs.getSpoolFilesByCorrelator(session, job["job-correlator"]);
     }
 
     /**
@@ -383,6 +383,23 @@ export class GetJobs {
         Logger.getAppLogger().trace("GetJobs.getSpoolContentCommon()");
         ImperativeExpect.toNotBeNullOrUndefined(jobFile, "Required job file object must be defined");
         const parameters: string = "/" + jobFile.jobname + "/" + jobFile.jobid +
+            JobsConstants.RESOURCE_SPOOL_FILES + "/" + jobFile.id + JobsConstants.RESOURCE_SPOOL_CONTENT;
+        Logger.getAppLogger().info("GetJobs.getSpoolContentCommon() parameters: " + parameters);
+        return ZosmfRestClient.getExpectString(session, JobsConstants.RESOURCE + parameters, [Headers.TEXT_PLAIN_UTF8]);
+    }
+
+    /**
+     * Get spool content from a job.
+     * @static
+     * @param {AbstractSession} session - z/OSMF connection info
+     * @param jobFile - the spool file for which you want to retrieve the content
+     * @returns {Promise<string>} - promise that resolves to the spool content
+     * @memberof GetJobs
+     */
+    public static async getSpoolContentByCorrelator(session: AbstractSession, jobFile: IJobFile) {
+        Logger.getAppLogger().trace("GetJobs.getSpoolContentCommon()");
+        ImperativeExpect.toNotBeNullOrUndefined(jobFile, "Required job file object must be defined");
+        const parameters: string = "/" + jobFile["job-correlator"] +
             JobsConstants.RESOURCE_SPOOL_FILES + "/" + jobFile.id + JobsConstants.RESOURCE_SPOOL_CONTENT;
         Logger.getAppLogger().info("GetJobs.getSpoolContentCommon() parameters: " + parameters);
         return ZosmfRestClient.getExpectString(session, JobsConstants.RESOURCE + parameters, [Headers.TEXT_PLAIN_UTF8]);
