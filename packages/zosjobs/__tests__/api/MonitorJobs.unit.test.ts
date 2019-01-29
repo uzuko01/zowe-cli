@@ -345,6 +345,8 @@ describe("MonitorJobs", () => {
                 expect(MonitorJobs.waitForStatusCommon).toHaveBeenCalledTimes(1);
                 expect(MonitorJobs.waitForStatusCommon).toHaveBeenCalledWith({shouldPassDown: true}, {
                     correlator: testCorrelator,
+                    jobname: "ABCD123",
+                    jobid: "782314",
                     status: JOB_STATUS.OUTPUT
                 });
             });
@@ -557,7 +559,8 @@ describe("MonitorJobs", () => {
                 };
 
                 const parms: Partial<IMonitorJobWaitForParms> = {
-                    status: "ACTIVE"
+                    status: "ACTIVE",
+                    correlator: "hello"
                 };
 
                 getStatusByCorrelatorMock.mockReturnValue(job);
