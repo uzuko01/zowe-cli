@@ -185,7 +185,7 @@ describe("System Tests - Monitor Jobs", () => {
             it("should detect and surface an error if the job requested is not found", async () => {
                 let error;
                 try {
-                    const params: any = {jobname: "JOB1", jobid: "JOB123"};
+                    const params: any = {jobname: "JOB1", jobid: "JOB123", correlator: "dummy"};
                     const response = await MonitorJobs.waitForJobOutputStatus(REAL_SESSION, params);
                 } catch (e) {
                     error = e;

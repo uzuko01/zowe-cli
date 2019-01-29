@@ -61,7 +61,11 @@ export class MonitorJobs {
      */
     public static async waitForJobOutputStatus(session: AbstractSession, job: IJob): Promise<IJob> {
         ImperativeExpect.toNotBeNullOrUndefined(job, "IJob object (containing jobname and jobid) required");
-        return MonitorJobs.waitForStatusCommon(session, {correlator: job["job-correlator"], status: JOB_STATUS.OUTPUT});
+        return MonitorJobs.waitForStatusCommon(session, {
+            correlator: job["job-correlator"],
+            jobid: job.jobid,
+            jobname: job.jobname, status: JOB_STATUS.OUTPUT
+        });
     }
 
     /**
@@ -244,7 +248,7 @@ export class MonitorJobs {
         // Log an get the status of the job
         this.log.debug(`Checking for "${parms.status}" status for jobname "${parms.jobname}", jobid "${parms.jobid}"...`);
         let job: IJob;
-        if (parms.correlator !== null) {
+        if (parms.correlator != null) {
             job = await GetJobs.getJobByCorrelator(session, parms.correlator);
         } else {
             job = await GetJobs.getStatusCommon(session, {jobid: parms.jobid, jobname: parms.jobname});
