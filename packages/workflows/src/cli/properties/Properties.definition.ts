@@ -19,7 +19,7 @@ import { WorkflowKey } from "./workflowkey/WorkflowKey.definition";
  *
  * @private
  */
-export const ListPropertiesDefinition: ICommandDefinition = {
+export const PropertiesDefinition: ICommandDefinition = {
     name: "list-properties",
     aliases: ["lp"],
     type: "group",

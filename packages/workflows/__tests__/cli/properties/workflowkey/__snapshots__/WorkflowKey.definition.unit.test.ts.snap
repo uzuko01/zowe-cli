@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`zos-workflows list-properties workflow-key definition should not have changed 1`] = `
+Object {
+  "aliases": Array [
+    "wk",
+  ],
+  "description": "Get the properties of a workflow with specified workflow key",
+  "examples": Array [
+    Object {
+      "description": "To list the poperties of a workflow instance in z/OSMF with workflow key \\"d043b5f1-adab-48e7-b7c3-d41cd95fa4b0\\"",
+      "options": "\\"d043b5f1-adab-48e7-b7c3-d41cd95fa4b0\\"",
+    },
+  ],
+  "name": "workflow-key",
+  "options": Array [
+    Object {
+      "aliases": Array [
+        "ls",
+      ],
+      "description": "Optional parameter for listing steps properties.",
+      "name": "list-steps",
+      "required": false,
+      "type": "boolean",
+    },
+    Object {
+      "aliases": Array [
+        "lv",
+      ],
+      "description": "Optional parameter for listing variables properties.",
+      "name": "list-variables",
+      "required": false,
+      "type": "boolean",
+    },
+  ],
+  "positionals": Array [
+    Object {
+      "description": "List properties of workflow with workflow key",
+      "name": "workflowKey",
+      "required": true,
+      "type": "string",
+    },
+  ],
+  "profile": Object {
+    "optional": Array [
+      "zosmf",
+    ],
+  },
+  "type": "command",
+}
+`;

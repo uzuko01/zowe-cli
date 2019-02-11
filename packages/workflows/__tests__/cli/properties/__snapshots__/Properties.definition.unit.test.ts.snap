@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`zos-workflows list-properties definition should not have changed 1`] = `
+Object {
+  "aliases": Array [
+    "lp",
+  ],
+  "description": "Get the properties of a workflow instance in z/OSMF",
+  "name": "list-properties",
+  "type": "group",
+}
+`;
