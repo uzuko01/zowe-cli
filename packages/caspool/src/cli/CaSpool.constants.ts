@@ -9,4 +9,8 @@
 *
 */
 
+<<<<<<< HEAD
 export const HLQ = "ZIN1SW.CA.SPOOL.USRLOAD";
+=======
+export const HLQ = "PUBLIC.STRRA03.TL";
+>>>>>>> 3406594661d10a0ea00b7154c52da5912fe41a28

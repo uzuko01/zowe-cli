@@ -12,11 +12,7 @@
 import { IHandlerParameters } from "@brightside/imperative";
 import { IIssueResponse, IssueTso } from "../../../../../zostso";
 import { ZosTsoBaseHandler } from "../../../../../zostso/src/ZosTsoBaseHandler";
-<<<<<<< HEAD
-import { HLQ } from "../../CaSpool.constants";
-=======
 import { HLQ } from "../../CASpool.constants";
->>>>>>> 3406594661d10a0ea00b7154c52da5912fe41a28
 
 /**
  * Handler to issue command to TSO address space
@@ -30,31 +26,28 @@ export default class Handler extends ZosTsoBaseHandler {
     public async processCmd(params: IHandlerParameters) {
 
         // Issue the TSO command
-<<<<<<< HEAD
-        const cmd = "CALL '" + HLQ + "(TSOCESF)' 'D," + params.arguments.commandText + "'";
-=======
-        const cmd = "CALL '" + HLQ + "(TSOCESF)' '" + params.arguments.commandText + "'";
->>>>>>> 3406594661d10a0ea00b7154c52da5912fe41a28
+        const cmd = "CALL '" + HLQ + "(TSOCESF)' 'REINIT'";
         const response: IIssueResponse = await IssueTso.issueTsoCommand(
             this.mSession,
             params.arguments.account,
             cmd,
             this.mTsoStart);
 
-        // If requested, suppress the startup
-        /* if (!params.arguments.suppressStartupMessages) {
-            this.console.log(response.startResponse.messages);
-        } */
-        const slicedResponse = (response.commandResponse.slice(response.commandResponse.indexOf("*RESPONSES:") + "*RESPONSES:".length
-           ,response.commandResponse.indexOf("READY")));
+        const array = response.commandResponse.split("\n");
+        let partone = "";
+        for (const line of array) {
+          if (line.indexOf("PRINTER") > -1) {
+            partone = line.slice(line.indexOf("PRINTER") + "PRINTER(TCPIP   ) ".length,line.indexOf("EDRAINED") - "5blnk".length);
+          }
 
-        const responseArray = slicedResponse.split("\n");
+          if (line.indexOf("I=") > -1) {
+            const statusCode = line.slice(line.indexOf("I=") + "I=".length,line.indexOf("\n"));
+            this.console.log(partone + statusCode);
+          }
 
-        for (const line of responseArray) {
-                this.console.log(line.slice("10:56:16  ESF7304 ".length,line.indexOf("\n")));
-            }
         }
 
         // Return as an object when using --response-format-json
-        // this.data.setObj(response);
+        this.data.setObj(response);
+    }
 }
