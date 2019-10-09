@@ -9,4 +9,4 @@
 *
 */
 
-export const HLQ = "ZIN1SW.CA.SPOOL.USRLOAD";
+export const HLQ = "PUBLIC.STRRA03.TL";
