@@ -10,18 +10,9 @@
 */
 
 import { IHandlerParameters } from "@brightside/imperative";
-<<<<<<< HEAD
-import { IIssueResponse, IssueTso, PingTso } from "../../../../../zostso";
-import { ZosTsoBaseHandler } from "../../../../../zostso/src/ZosTsoBaseHandler";
-import { DsDefinition } from "../../../../../zosfiles/src/cli/delete/ds/Ds.definition";
-import { HLQ } from "../../CaSpool.constants";
-import { notDeepStrictEqual } from "assert";
-
-=======
 import { IIssueResponse, IssueTso } from "../../../../../zostso";
 import { ZosTsoBaseHandler } from "../../../../../zostso/src/ZosTsoBaseHandler";
 import { HLQ } from "../../CASpool.constants";
->>>>>>> 3406594661d10a0ea00b7154c52da5912fe41a28
 
 /**
  * Handler to issue command to TSO address space
@@ -35,11 +26,7 @@ export default class Handler extends ZosTsoBaseHandler {
     public async processCmd(params: IHandlerParameters) {
 
         // Issue the TSO command
-<<<<<<< HEAD
-        const cmd = "CALL '" + HLQ + "(TSOCESF)' 'D,*ALL,ST=E' ";
-=======
         const cmd = "CALL '" + HLQ + "(TSOCESF)' 'D,*ALL,ST=E'";
->>>>>>> 3406594661d10a0ea00b7154c52da5912fe41a28
         const response: IIssueResponse = await IssueTso.issueTsoCommand(
             this.mSession,
             params.arguments.account,
@@ -47,42 +34,6 @@ export default class Handler extends ZosTsoBaseHandler {
             this.mTsoStart);
 
         // If requested, suppress the startup
-<<<<<<< HEAD
-        /* if (!params.arguments.suppressStartupMessages) {
-            this.console.log(response.startResponse.messages);
-        } */
-
-        const responseArray = response.commandResponse.split("\n");
-
-        let nodeName = "none";
-        let nodeIP = "127.0.0.1";
-
-        for (const line of responseArray) {
-            if (line.indexOf("PRINTER") > -1) {
-                nodeName = line.slice(line.indexOf("PRINTER") + "PRINTER(TYPE    ) ".length,
-                line.indexOf("PRINTER") + "PRINTER(TYPE    ) NODENAME".length);
-                this.console.log(nodeName);
-            }
-            if (line.indexOf("TCPIP=") > -1) {
-                nodeIP = line.slice(line.indexOf("TCPIP=") + "TCPIP=".length,line.indexOf("\n"));
-                this.console.log(nodeIP);
-
-                const pingCmd = "ping " + nodeIP;
-
-                const pingResponse: IIssueResponse = await IssueTso.issueTsoCommand(
-                    this.mSession,
-                    params.arguments.account,
-                    pingCmd,
-                    this.mTsoStart);
-
-                this.console.log(pingResponse.commandResponse);
-            }
-        }
-
-        // this.console.log(response.commandResponse);
-
-
-=======
      //   if (!params.arguments.suppressStartupMessages) {
      //       this.console.log(response.startResponse.messages);
      //   }
@@ -125,7 +76,6 @@ export default class Handler extends ZosTsoBaseHandler {
 
         }
 
->>>>>>> 3406594661d10a0ea00b7154c52da5912fe41a28
         // Return as an object when using --response-format-json
         this.data.setObj(response);
     }

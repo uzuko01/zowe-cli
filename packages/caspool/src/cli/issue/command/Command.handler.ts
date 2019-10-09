@@ -12,11 +12,7 @@
 import { IHandlerParameters } from "@brightside/imperative";
 import { IIssueResponse, IssueTso } from "../../../../../zostso";
 import { ZosTsoBaseHandler } from "../../../../../zostso/src/ZosTsoBaseHandler";
-<<<<<<< HEAD
-import { HLQ } from "../../CaSpool.constants";
-=======
 import { HLQ } from "../../CASpool.constants";
->>>>>>> 3406594661d10a0ea00b7154c52da5912fe41a28
 
 /**
  * Handler to issue command to TSO address space
@@ -30,11 +26,7 @@ export default class Handler extends ZosTsoBaseHandler {
     public async processCmd(params: IHandlerParameters) {
 
         // Issue the TSO command
-<<<<<<< HEAD
-        const cmd = "CALL '" + HLQ + "(TSOCESF)' 'D," + params.arguments.commandText + "'";
-=======
         const cmd = "CALL '" + HLQ + "(TSOCESF)' '" + params.arguments.commandText + "'";
->>>>>>> 3406594661d10a0ea00b7154c52da5912fe41a28
         const response: IIssueResponse = await IssueTso.issueTsoCommand(
             this.mSession,
             params.arguments.account,
