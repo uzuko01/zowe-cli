@@ -14,6 +14,7 @@ import { IssueCommand } from "./issue/Issue.definition";
 import { List } from "./list/List.definition";
 import { Nodes } from "./nodes/Nodes.definition";
 import { Report } from "./report/Report.definition";
+import { Generate } from "./generate/Generate.definition";
 import { ZosmfSession } from "../../../zosmf";
 
 export const definition: ICommandDefinition = {
@@ -27,6 +28,7 @@ export const definition: ICommandDefinition = {
         List,
         Nodes,
         Report,
+        Generate
     ],
     passOn: [{
         property: "options",
