@@ -26,27 +26,44 @@ export default class Handler extends ZosTsoBaseHandler {
     public async processCmd(params: IHandlerParameters) {
 
         // Issue the TSO command
-        const cmd = "CALL '" + HLQ + "(TSOCESF)' 'D," + params.arguments.commandText + "'";
+        const cmd = "CALL '" + HLQ + "(TSOCESF)' 'D," + params.arguments.nodeName + "'";
         const response: IIssueResponse = await IssueTso.issueTsoCommand(
             this.mSession,
             params.arguments.account,
             cmd,
             this.mTsoStart);
 
+
         // If requested, suppress the startup
         /* if (!params.arguments.suppressStartupMessages) {
             this.console.log(response.startResponse.messages);
         } */
-        const slicedResponse = (response.commandResponse.slice(response.commandResponse.indexOf("*RESPONSES:") + "*RESPONSES:".length
-           ,response.commandResponse.indexOf("READY")));
+        /*         const slicedResponse = (response.commandResponse.slice(response.commandResponse.indexOf("*RESPONSES:") + "*RESPONSES:".length
+                   ,response.commandResponse.indexOf("READY"))); */
 
-        const responseArray = slicedResponse.split("\n");
+        const responseArray = response.commandResponse.split("\n");
+
+        const nodeName = params.arguments.nodeName;
+        let nodeIP = "127.0.0.1";
 
         for (const line of responseArray) {
-                this.console.log(line.slice("10:56:16  ESF7304 ".length,line.indexOf("\n")));
+            if (line.indexOf("TCPIP=") > -1) {
+                nodeIP = line.slice(line.indexOf("TCPIP=") + "TCPIP=".length, line.indexOf("\n"));
+                this.console.log("Pinging " + nodeName + " @IP: " + nodeIP);
+
+                const pingCmd = "ping " + nodeIP;
+
+                const pingResponse: IIssueResponse = await IssueTso.issueTsoCommand(
+                    this.mSession,
+                    params.arguments.account,
+                    pingCmd,
+                    this.mTsoStart);
+
+                this.console.log(pingResponse.commandResponse.replace("READY",""));
             }
         }
+    }
 
-        // Return as an object when using --response-format-json
-        // this.data.setObj(response);
+    // Return as an object when using --response-format-json
+    // this.data.setObj(response);
 }

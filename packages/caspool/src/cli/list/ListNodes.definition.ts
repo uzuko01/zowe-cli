@@ -12,21 +12,15 @@
 import { ICommandDefinition } from "@brightside/imperative";
 import {
     CommandDefinition
-} from "./command/Command.definition";
-import {
-    PingCommandDefinition
-} from "./ping/PingCommand.definition";
-import { LpqCommandDefinition } from "./lpq/LpqCommand.definition";
+} from "./edrained/Command.definition";
 
-export const IssueCommand: ICommandDefinition = {
-    name: "issue",
-    aliases: [],
+export const ListNodes: ICommandDefinition = {
+    name: "list-nodes",
+    aliases: ["ln"],
     type: "group",
-    summary: "Issue CA Spool commands",
-    description: "Issue CA Spool commands",
+    summary: "List CA Spool nodes",
+    description: "List CA Spool nodes",
     children: [
         CommandDefinition,
-        PingCommandDefinition,
-        LpqCommandDefinition
     ],
 };
