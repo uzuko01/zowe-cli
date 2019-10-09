@@ -18,8 +18,8 @@ export const List: ICommandDefinition = {
     name: "list",
     aliases: ["ls"],
     type: "group",
-    summary: "List CA Spool nodes",
-    description: "List CA Spool nodes",
+    summary: "List CA Spool Nodes",
+    description: "List CA Spool Nodes",
     children: [
         CommandDefinition,
     ],

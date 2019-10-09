@@ -12,6 +12,7 @@
 import { ICommandDefinition } from "@brightside/imperative";
 import { IssueCommand } from "./issue/Issue.definition";
 import { List } from "./list/List.definition";
+import { Nodes } from "./nodes/Nodes.definition";
 import { ZosmfSession } from "../../../zosmf";
 
 export const definition: ICommandDefinition = {
@@ -22,7 +23,8 @@ export const definition: ICommandDefinition = {
     description: "Issue TSO commands and interact with Ca Spool",
     children: [
         IssueCommand,
-        List
+        List,
+        Nodes
     ],
     passOn: [{
         property: "options",
