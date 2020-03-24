@@ -33,7 +33,7 @@ describe("Copy", () => {
         });
     });
 
-    describe("Data Set", () => {
+    describe("Data Set test", () => {
         const fromDataSetName = "USER.DATA.FROM";
         const fromMemberName = "mem1";
         const toDataSetName = "USER.DATA.TO";
